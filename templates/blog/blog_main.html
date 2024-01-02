@@ -1,0 +1,285 @@
+{% load static %}
+{% load custom_filters %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{{post_obj.title}} by {{post_obj.author.get_full_name}} &mdash; Writophobia</title>
+    <meta name="description" content="{{post_obj.description}}">
+    <meta name="keywords" content="{{post_obj.tags}}">
+    <meta name="author" content="{{post_obj.author.get_full_name}}">
+    <link rel="canonical" href="{{request.build_absolute_uri}}">
+
+    <meta property='og:title'  content='{{post_obj.title}}'>
+    <meta property='og:description'  content='{{post_obj.description}}'>
+    <meta property='og:url'  content='{{request.build_absolute_uri}}'>
+    <meta property="og:image"  content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/media/{{post_obj.image_url}}">
+
+    <meta name='twitter:title' content='{{post_obj.title}}'>
+    <meta name='twitter:description' content='{{post_obj.description}}'>
+    <meta name='twitter:url' content='{{request.build_absolute_uri}}'>
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/media/{{post_obj.image_url}}">
+
+    {% include 'blog/css_import.html' %}
+
+</head>
+
+<body data-prismjs-copy="Copy Now">
+    <div class="wrap">
+        {% include 'blog/header.html' %}
+
+        <div class="container logo-wrap">
+            <div class="row pt-5">
+                <div class="col-12 text-center">
+                    <h1 class="site-logo" style="font-size: 40px;">{{post_obj.title}}</h1>
+                </div>
+            </div>
+        </div>
+        <section class="site-section py-sm">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="mb-4" style="display: none;">Some Data</h2>
+                    </div>
+                </div>
+                <div class="row blog-entries">
+                    <div class="col-md-12 col-lg-12 main-content"  style="font-size: 20px !important; line-height: 28px;">
+                        {% for each in post_obj.contents %}
+                            {% if each.content_type == 'code' %}
+                                <pre class="language-{{each.editor_type}}">
+                                    <code class="language-{{each.editor_type}}">
+                                        {{each.content}}
+                                    </code>
+                                </pre>
+                            {% elif each.content_type == 'image' %}
+                                <div style="text-align: center;">
+                                    <img src="/media/{% if each.image %}{{ each.image }}{% endif %}" style="max-height: 60vh; max-width: 100%;"/>
+                                    <span class="picture_tagline">{{each.content | linebreaks}}</span>
+                                </div>
+                            {% elif each.content_type == 'text_html' %}
+                                <p>
+                                    {% autoescape on %}
+                                    {{each.content | safe}}
+                                    {% endautoescape %}
+                                </p>
+                            {% else %}
+                                <p>
+                                    {{each.content | linebreaks}}
+                                </p>
+                            {% endif %}
+                        {% endfor %}
+        </section>
+        <br><br>
+
+        <section class="site-section py-sm">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="heading" style="padding-bottom: 20px;
+                        border-bottom: 1px solid #e6e6e6; margin-bottom: 28px;">You May Like these:</h3>
+                    </div>
+                </div>
+                <div class="row blog-entries">
+                    <div class="col-md-12 col-lg-8 main-content">
+                        {% include 'blog/blog_list.html' with post_objects=suggestions home=False %}
+                    </div>
+
+                    <div class="col-md-12 col-lg-4 sidebar">
+                        <!--
+                        <div class="sidebar-box search-form-wrap">
+                            <form action="#" class="search-form">
+                                <div class="form-group">
+                                    <span class="icon fa fa-search"></span>
+                                    <input type="text" class="form-control" id="s" placeholder="Type a keyword and hit enter">
+                                </div>
+                            </form>
+                        </div>
+                        -->
+
+                        <div class="sidebar-box">
+                            <div class="bio text-center">
+                                
+                                {% if post_obj.author.picture_thumbnail %}
+                                <img src="/media/{{post_obj.author.picture_thumbnail}}" alt="Image Placeholder" class="img-fluid" style="height: 100px;">
+                                {% elif post_obj.author.picture %}
+                                <img src="/media/{{post_obj.author.picture}}" alt="Image Placeholder" class="img-fluid" style="height: 100px;">
+                                {% else %}
+                                <img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Image Placeholder" class="img-fluid">
+                                {% endif %}
+                                <div class="bio-body">
+                                    <h2>{{post_obj.author.get_full_name}}</h2>
+                                    <p>{{post_obj.author.description}}</p>
+                                    <p style="display: none;"><a href="#" class="btn btn-primary btn-sm rounded">Read my bio</a></p>
+                                    <p class="social">
+                                        {% if post_obj.author.facebook_url %}
+                                        <a href="{{ post_obj.author.facebook_url }}" target="_blank" class="p-2"><span class="fa fa-facebook"></span></a>
+                                        {% endif %}
+                                        {% if post_obj.author.twitter_url %}
+                                        <a href="{{ post_obj.author.twitter_url }}" target="_blank" class="p-2"><span class="fa fa-twitter" target="_blank"></span></a>
+                                        {% endif %}
+                                        {% if post_obj.author.instagram_url %}
+                                        <a href="{{ post_obj.author.instagram_url }}" target="_blank" class="p-2"><span class="fa fa-instagram" target="_blank"></span></a>
+                                        {% endif %}
+                                        {% if post_obj.author.youtube_url %}
+                                        <a href="{{ post_obj.author.youtube_url }}" target="_blank" class="p-2"><span class="fa fa-youtube-play" target="_blank"></span></a>
+                                        {% endif %}
+                                        {% if post_obj.author.linkedin_url %}
+                                        <a href="{{ post_obj.author.linkedin_url }}" target="_blank" class="p-2"><span class="fa fa-linkedin" target="_blank"></span></a>
+                                        {% endif %}
+                                    </p>
+                                    <a href="{% url 'profile' post_obj.author.username %}">
+                                        <button class="btn btn-outline-secondary btn-sm">View Full Profile</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-box">
+                            <h3 class="heading">Popular Posts</h3>
+                            <div class="post-entry-sidebar">
+                                <ul>
+                                    {% for post in popular_posts %}
+                                    <li>
+                                        <a href="{% url 'blog-detail' post.encoded_url %}">
+                                            <img src="/media/{{post.image_url_200}}" alt="Image placeholder" class="mr-4">
+                                            <div class="text">
+                                                <h4>{{post.title}}</h4>
+                                                <div class="post-meta">
+                                                    <span class="mr-2">{{post.created_at.date}}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-box">
+                            <h3 class="heading">Categories</h3>
+                            <ul class="categories">
+                                {% for each in categories %}
+                                    <li><a href="{% url 'home' %}?category={{each.title}}">{{each.title}} <span>({{ each.total_count }})</span></a></li>
+                                {% endfor %}
+                                <!--
+                                <li><a href="#">Food <span>(12)</span></a></li>
+                                <li><a href="#">Travel <span>(22)</span></a></li>
+                                <li><a href="#">Lifestyle <span>(37)</span></a></li>
+                                <li><a href="#">Business <span>(42)</span></a></li>
+                                <li><a href="#">Adventure <span>(14)</span></a></li>
+                                -->
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-box">
+                            <h3 class="heading">Tags</h3>
+                            <ul class="tags">
+                                {% with post_obj.tags|split:"," as tags %}
+                                    {% for tag in tags %}
+                                    <li><a href="#">{{tag}}</a></li>
+                                    {% endfor %}
+                                {% endwith %}
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <h3>About Author</h3>
+                        <p class="mb-4">
+                            {% if post_obj.author.picture %}
+                            <img src="/media/{{post_obj.author.picture}}" alt="Image placeholder" class="img-fluid">
+                            {% else %}
+                            <img src="https://preview.colorlib.com/theme/wordify/images/img_1.jpg" alt="Image placeholder" class="img-fluid">
+                            {% endif %}
+                        </p>
+                        <p>{{post_obj.author.get_full_name}}</p>
+                        <p>{{post_obj.author.description|truncatechars:180}} <a href="{% url 'profile' post_obj.author.username %}">Read More</a></p>
+                    </div>
+                    <div class="col-md-6 ml-auto">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h3>Latest Post</h3>
+                                <div class="post-entry-sidebar">
+                                    <ul>
+                                        {% for post in latest_posts %}
+                                        <li>
+                                            <a href="{% url 'blog-detail' post.encoded_url %}">
+                                                <img src="/media/{{post.image_url_200}}" alt="Image placeholder" class="mr-4">
+                                                <div class="text">
+                                                    <h4>{{post.title}}</h4>
+                                                    <div class="post-meta">
+                                                        <span class="mr-2">{{post.created_at.date}}</span>
+                                                        <span class="ml-2"><span class="fa fa-eye"></span> {{post.views}}</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-4">
+                                <div class="mb-5">
+                                    <h3>Quick Links</h3>
+                                    <ul class="list-unstyled">
+                                        <li><a href="#">About Us</a></li>
+                                        <li><a href="#">Travel</a></li>
+                                        <li><a href="#">Adventure</a></li>
+                                        <li><a href="#">Courses</a></li>
+                                        <li><a href="#">Categories</a></li>
+                                    </ul>
+                                </div>
+                                <div class="mb-5">
+                                    <h3>Social</h3>
+                                    <ul class="list-unstyled footer-social">
+                                        <li><a href="#"><span class="fa fa-twitter"></span> Twitter</a></li>
+                                        <li><a href="#"><span class="fa fa-facebook"></span> Facebook</a></li>
+                                        <li><a href="#"><span class="fa fa-instagram"></span> Instagram</a></li>
+                                        <li><a href="#"><span class="fa fa-vimeo"></span> Vimeo</a></li>
+                                        <li><a href="#"><span class="fa fa-youtube-play"></span> Youtube</a></li>
+                                        <li><a href="#"><span class="fa fa-snapchat"></span> Snapshot</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p class="small">
+
+                            Copyright &copy;
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script> All Rights Reserved
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <div id="loader" class="show fullscreen">
+        <svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#f4b214" />
+        </svg>
+    </div>
+
+    {% include 'blog/js_import.html' %}
+</body>
+
+</html>

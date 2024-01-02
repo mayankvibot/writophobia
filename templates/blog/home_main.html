@@ -1,0 +1,139 @@
+{% load static %}
+{% load custom_filters %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+    <title>{% if 'subcategory' in request.GET %}'{{request.GET.subcategory}}' Subcategory in {% endif %}{% if 'category' in request.GET %}'{{request.GET.category}}' Category in {% endif %}{% if 'search' in request.GET %}'{{request.GET.search}}' in {% endif %}Writophobia - Let's Learn Something</title>
+    <meta name="description" content="Discover Writophobia, a dynamic blogging platform that offers a rich selection of topics, including computer programming, travel, and practical tips. Immerse yourself in insightful and engaging articles, all written by authors with a unique perspective.">
+    <meta name="keywords" content="writophobia,blogs,coding,programming,travel,tips">
+    <link rel="canonical" href="{{canonical_url}}">
+
+    <meta property='og:title'  content="Writophobia - Let's Learn Something">
+    <meta property='og:description'  content='Discover Writophobia, a dynamic blogging platform that offers a rich selection of topics, including computer programming, travel, and practical tips. Immerse yourself in insightful and engaging articles, all written by authors with a unique perspective.'>
+    <meta property='og:url'  content='{{request.build_absolute_uri}}'>
+    <meta property="og:image"  content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/static/images/logo_1.jpg">
+
+    <meta name='twitter:title' content="Writophobia - Let's Learn Something">
+    <meta name='twitter:description' content='Discover Writophobia, a dynamic blogging platform that offers a rich selection of topics, including computer programming, travel, and practical tips. Immerse yourself in insightful and engaging articles, all written by authors with a unique perspective.'>
+    <meta name='twitter:url' content='{{request.build_absolute_uri}}'>
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/static/images/logo_1.jpg">
+
+    {% include 'blog/css_import.html' %}
+</head>
+
+<body data-prismjs-copy="Copy Now">
+    <div class="wrap" > <!---->
+        {% include 'blog/header.html' %}
+        
+        <div class="container logo-wrap">
+            <div class="row pt-5">
+                <div class="col-12 text-center">
+                    <h1 class="site-logo" style="font-size: 40px;">{{post_obj.title}}</h1>
+                </div>
+            </div>
+        </div>
+        <section class="site-section py-sm">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="mb-4" style="display: none;">Some Data</h2>
+                    </div>
+                </div>
+                <div class="row blog-entries">
+                    <div class="col-md-12 col-lg-12 main-content"  style="font-size: 22px !important;">
+                        {% for each in post_obj.contents %}
+                            {% if each.content_type == 'code' %}
+                            <pre class="language-{{each.editor_type}}">
+                                <code class="language-{{each.editor_type}}">
+                                    {{each.content}}
+                                </code>
+                            </pre>
+                            {% elif each.content_type == 'image' %}
+                                <div style="text-align: center;">
+                                    <img src="/media/{% if each.image %}{{ each.image }}{% endif %}" style="max-height: 50vh; max-width: 100%;"/>
+                                    {{each.content | linebreaks}}
+                                </div>
+                            {% else %}
+                            <p>
+                                {{each.content | linebreaks}}
+                            </p>
+                            {% endif %}
+                        {% endfor %}
+        </section>
+
+        <section class="site-section py-sm">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 class="mb-4 text-center">For Your Reading Pleasure</h2>
+                    </div>
+                </div>
+                <div class="row blog-entries">
+                    <div class="col-md-12 col-lg-12 main-content">
+                        {% include 'blog/blog_list.html' with post_objects=post_objects home=True %}
+                        <div class="row mt-5">
+                            <div class="col-md-12 text-center">
+                                <nav aria-label="Page navigation" class="text-center">
+                                    <ul class="pagination">
+                                        <!-- Previous Button -->
+                                        {% if post_objects.has_previous %}
+                                        <li class="page-item active"><a class="page-link" href="{% url 'home' %}{% if post_objects.previous_page_number != 1 %}?page={{ post_objects.previous_page_number }}{% if params %}&{% endif %}{% else %}{% if params %}?{{params}}{% endif %}{% endif %}">&lt;</a></li>
+                                        {% else %}
+                                        <li class="page-item disabled"><a class="page-link" href="#">&lt;</a></li>
+                                        {% endif %}
+
+                                        <!-- Page Number -->
+                                        {% for i in page_range %}
+                                        <li class="page-item {% if i == post_objects.number %}active{% endif %}"><a class="page-link" href="{% url 'home' %}{% if i == 1 %}{% if params %}?{{params}}{% endif %}{% else %}?page={{i}}{% if params %}&{{params}}{% endif %}{% endif %}">{{i}}</a></li>
+                                        {% endfor %}
+
+                                        <!-- Next Button -->
+                                        {% if post_objects.has_next %}
+                                        <li class="page-item active"><a class="page-link" href="{% url 'home' %}?page={{ post_objects.next_page_number }}{% if params %}&{{params}}{% endif %}">&gt;</a></li>
+                                        {% else %}
+                                        <li class="page-item disabled"><a class="page-link" href="#">&gt;</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p class="small">
+
+                            Copyright &copy; 
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script> All Rights Reserved | Writophobia
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <div id="loader" class="show fullscreen">
+        <svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#f4b214" />
+        </svg>
+    </div>
+
+    {% include 'blog/js_import.html' %}
+</body>
+
+</html>

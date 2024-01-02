@@ -1,0 +1,82 @@
+<header role="banner">
+    <div class="top-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-3 social">
+                    <a class="absolute-toggle d-block d-md-none" style="position: unset;" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
+
+                    <!-- absolute-toggle 
+                    <a class="d-sm-none d-md-block" href="#"><span class="fa fa-twitter"></span></a>
+                    <a href="#"><span class="fa fa-facebook"></span></a>
+                    <a href="#"><span class="fa fa-instagram"></span></a>
+                    <a href="#"><span class="fa fa-youtube-play"></span></a>
+                    -->
+                    <div class="d-none d-md-block" style="font-size: 1.3rem; color: #fff;">
+                        <a href="{% url 'home' %}"  style="color: #fff;">Writophobia</a>
+                    </div>
+                    
+                </div>
+                <div class="col-9 search-top">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'my_profile' %}">
+                        <button class="d-none d-md-block btn btn-outline-light btn-sm search-top-form" style="margin-left: 15px;">My Profile</button>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}">
+                        <button class="d-none d-md-block btn btn-outline-light btn-sm search-top-form" style="margin-left: 15px;">Login</button>
+                    </a>
+                    <a href="{% url 'register' %}">
+                        <button class="d-none d-md-block btn btn-outline-light btn-sm search-top-form" style="margin-left: 15px;">Register</button>
+                    </a>
+                    {% endif %}
+                    <form method="get" action="{% url 'home' %}" class="search-top-form">
+                        <span class="icon fa fa-search"></span>
+                        <input type="text" id="s" name="search" placeholder="Search on Writophobia..." value="{{searched}}" style="min-width: 240px;" autocomplete="off">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-md  navbar-light bg-light" style="padding: 0;">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item active dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown04">
+                            {% for category in categories %}
+                            <a class="dropdown-item" href="{% url 'home' %}?category={{category.title}}">{{category.title}}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    <li class="nav-item active dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Popular Sub-Category</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown05">
+                            {% for subcategory in subcategories %}
+                            <a class="dropdown-item" href="{% url 'home' %}?subcategory={{subcategory.title}}">{{subcategory.title}}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'contact-us' %}">Contact</a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item active d-md-none">
+                        <a class="nav-link" href="{% url 'my_profile' %}">My Profile</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item active d-md-none">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item active d-md-none">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

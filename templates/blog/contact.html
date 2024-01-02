@@ -1,0 +1,81 @@
+{% load static %}
+{% load custom_filters %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+    <title>Contact Us - Writophobia</title>
+    <meta name="description" content="Contact Us - Writophobia">
+    <meta name="keywords" content="writophobia,blogs,coding,programming,travel,tips">
+    <link rel="canonical" href="{{canonical_url}}">
+
+    <meta property='og:title'  content="Contact Us - Writophobia">
+    <meta property='og:description'  content='Contact Us - Writophobia'>
+    <meta property='og:url'  content='{{request.build_absolute_uri}}'>
+    <meta property="og:image"  content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/static/images/logo_1.jpg">
+
+    <meta name='twitter:title' content="Contact Us - Writophobia">
+    <meta name='twitter:description' content='Contact Us - Writophobia'>
+    <meta name='twitter:url' content='{{request.build_absolute_uri}}'>
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/static/images/logo_1.jpg">
+
+    {% include 'blog/css_import.html' %}
+</head>
+
+<body data-prismjs-copy="Copy Now">
+    <div class="wrap" > <!---->
+        {% include 'blog/header.html' %}
+        
+        <div class="container logo-wrap">
+            <div class="row pt-5">
+                <div class="col-12 text-center">
+                    <h1 class="site-logo" style="font-size: 40px;">Contact Us </h1>
+                </div>
+            </div>
+        </div>
+        <section class="site-section py-sm">
+            <div class="container">
+                <div class="row blog-entries">
+                    <div class="col-md-12 col-lg-12 main-content"  style="font-size: 22px !important; min-height: 50vh;">
+                        <br>
+                        <h4 class="text-center">Form Coming Soon</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p class="small">
+
+                            Copyright &copy; 
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script> All Rights Reserved | Writophobia
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <div id="loader" class="show fullscreen">
+        <svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#f4b214" />
+        </svg>
+    </div>
+
+    {% include 'blog/js_import.html' %}
+</body>
+
+</html>

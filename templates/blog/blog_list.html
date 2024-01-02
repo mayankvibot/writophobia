@@ -1,0 +1,31 @@
+{% load static %}
+{% load custom_filters %}
+<div class="row">
+    {% for each in post_objects %}
+    <div class="{% if home == True %}col-lg-4{% endif %} col-md-6">
+        <a href="{% url 'blog-detail' each.encoded_url %}" class="blog-entry element-animate" data-animate-effect="fadeIn" style="border: 1px solid #efefef">
+            <img src="/media/{{each.image_url_500}}" alt="Image placeholder">
+            <div class="blog-content-body" style="border: none; border-top: 1px solid #efefef">
+                <div class="post-meta">
+                    <span class="author mr-0">
+                        {% if each.author.picture_thumbnail %}
+                        <img src="/media/{{each.author.picture_thumbnail}}" alt="Colorlib" style="height: 30px;"> 
+                        {% elif each.author.picture %}
+                        <img src="/media/{{each.author.picture}}" alt="Colorlib" style="height: 30px;"> 
+                        {% else %}
+                        <img src="https://preview.colorlib.com/theme/wordify/images/person_1.jpg" alt="Colorlib"> 
+                        {% endif %}
+                    </span>
+                    <span class="mr-1">{{each.author.get_full_name}}</span>|
+                    <span class="mr-1">{{each.created_at.date}}</span>|
+                    <span class="ml-1"><span class="fa fa-eye"></span> {{each.views}}</span>
+                </div>
+                <h2>{{each.title}}</h2>
+                <span style="font-size: 14px; color: #444;">{{each.description|truncatechars:70}}</span>
+                
+                <!--<span class="badge badge-dark" style="background-color: black; color: #fff;">{{each.category}}</span>-->
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
