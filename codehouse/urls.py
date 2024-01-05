@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 from django.views.static import serve
 
 urlpatterns = [
-    path('hjadklmin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('comment/', include('comment.urls')),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     path('', include('blog.urls')),
